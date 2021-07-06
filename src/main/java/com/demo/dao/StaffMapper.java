@@ -1,4 +1,4 @@
-package com.demo.mapper;
+package com.demo.dao;
 
 import com.demo.entity.Staff;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,5 +31,18 @@ public interface StaffMapper {
      * 查询所有员工信息
      */
      List<Staff> selectAll();
+
+    /**
+     * 根据字段属性进行添加
+     * @param name
+     * @return
+     */
+     int addStaffByFiled(String name);
+
+    /**
+     * 将user表中的字段添加到staff表中
+     * @return
+     */
+     int addStaffByUSerFiled();
 
 }

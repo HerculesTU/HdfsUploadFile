@@ -37,4 +37,20 @@ public interface StaffService {
      */
     List<Staff> findAllStaff();
 
+    /**
+     * 根据字段属性进行添加
+     * @param name
+     * @return
+     */
+    int addStaffByFiled(String name);
+
+
+    /**
+     * 將user表中的數據添加到staff表中
+     * @return
+     */
+    int addStaffByUSerFiled();
+
+
+
 }

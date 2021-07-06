@@ -3,13 +3,17 @@ package com.demo.utils;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
+import org.apache.hadoop.hdfs.DistributedFileSystem;
+import org.apache.hadoop.hdfs.protocol.DatanodeInfo;
 import org.apache.hadoop.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.InputStream;
-import java.net.SocketTimeoutException;
 import java.net.URI;
+import java.nio.file.Paths;
 
 /**
  * HDFS工具类
@@ -227,15 +231,16 @@ public class HdfsUtils {
     /**
      * @功能 上传文件
      */
-    public void uploadFile(String fileName, String uploadPath) throws Exception {
+    public void uploadFile(MultipartFile fileName, String uploadFile) throws Exception {
 
         FileSystem fileSystem = getFileSystem();
 
         // 上传路径
-        Path clientPath = new Path(fileName);
+        String src = "C:\\Users\\Administrator\\Desktop\\";
+        Path clientPath = new Path(src + fileName.getOriginalFilename());
 
         // 目标路径
-        Path serverPath = new Path(uploadPath);
+        Path serverPath = new Path(uploadFile);
 
         // 调用文件系统的文件复制方法,前面参数是指是否删除原文件，true为删除，默认为false
         fileSystem.copyFromLocalFile(clientPath, serverPath);
@@ -243,7 +248,10 @@ public class HdfsUtils {
         fileSystem.close();
 
         System.out.println("文件上传成功！");
+
+
     }
+
 
     /**
      * @功能 下载文件
@@ -274,5 +282,24 @@ public class HdfsUtils {
         return isExists;
     }
 
+
+    /**
+     * @功能 获取HDFS集群上所有节点的名称信息
+     */
+    public void getListNode() throws Exception {
+
+        Configuration conf = new Configuration();
+
+        String uri = "hdfs://172.16.4.226:9000";
+        FileSystem fs = FileSystem.get(URI.create(uri), conf);
+        DistributedFileSystem hdfs = (DistributedFileSystem) fs;
+        DatanodeInfo[] dataNodeStats = hdfs.getDataNodeStats();
+        String[] names = new String[dataNodeStats.length];
+        for (int i = 0; i < dataNodeStats.length; i++) {
+            names[i] = dataNodeStats[i].getHostName();
+            System.out.println("node:" + i + ",name:" + names[i]);
+        }
+
+    }
 }
 

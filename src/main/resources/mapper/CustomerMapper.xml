@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.CustomerMapper">
+  <resultMap id="BaseResultMap" type="com.demo.entity.Customer">
+    <id column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+
+    <!--将user里的字段数据添加到customer中-->
+    <insert id="addCustomerByUser">
+        INSERT INTO customer (PASSWORD, phone)
+        SELECT password,
+               phone
+        FROM user
+        WHERE user.password NOT IN (
+            SELECT password
+            FROM customer
+        )
+          AND user.phone NOT IN (SELECT phone FROM customer)
+
+    </insert>
+
+</mapper>

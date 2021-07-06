@@ -24,20 +24,24 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
-    # 配置HTML访问目录
+  # 配置HTML访问目录
+  web:
+    resources:
+      static-locations: classpath:/templates/
+
+  # 配置jsp访问目录
   mvc:
     view:
-      prefix: /static/pages/
-      suffix: .html
-
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
 
 mybatis:
-  mapper-locations: classpath:mapping/*.xml  #classpath就是应用程序resources的路径
+  mapper-locations: classpath:mapper/*.xml  #classpath就是应用程序resources的路径
   # 扫描实体类所在的位置
   type-aliases-package: com.demo.entity
-  # 开启自动驼峰命名匹配
-  configuration:
-    map-underscore-to-camel-case: true
+  # mybatis配置文件位置
+  config-location: classpath:mybatis/mybatis-config.xml
+
 
 
 
